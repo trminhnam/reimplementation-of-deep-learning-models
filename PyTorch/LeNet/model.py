@@ -10,16 +10,17 @@ class LeNet(nn.Module):
     def __init__(self):
         super(LeNet, self).__init__()
         
+        self.tanh = nn.Tanh()
+        self.avgpool = nn.AvgPool2d(
+            kernel_size=2,
+            stride=2,
+        )
+        
         self.conv1 = nn.Conv2d(
             in_channels=1,
             out_channels=6,
             kernel_size=5,
             stride=1
-        )
-        
-        self.avgpool = nn.AvgPool2d(
-            kernel_size=2,
-            stride=2,
         )
 
         self.conv2 = nn.Conv2d(
@@ -46,8 +47,6 @@ class LeNet(nn.Module):
             out_features=10
         )
         
-        self.softmax = nn.Softmax()
-        self.tanh = nn.Tanh()
         
     def forward(self, x):
         x = self.conv1(x)
@@ -66,7 +65,6 @@ class LeNet(nn.Module):
         x = self.tanh(x)
 
         x = self.fc2(x)
-        x = self.softmax(x)
         
         return x
         
