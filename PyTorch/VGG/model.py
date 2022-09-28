@@ -12,6 +12,7 @@ from typing import cast
 
 MAXPOOL = "M"
 
+# Reference: VGG of torchvision library
 cfgs = {
     "A": [64, "M", 128, "M", 256, 256, "M", 512, 512, "M", 512, 512, "M"],
     "B": [64, 64, "M", 128, 128, "M", 256, 256, "M", 512, 512, "M", 512, 512, "M"],
@@ -54,8 +55,8 @@ def make_layers(cfg, image_channels=3, batchnorm=False):
     layers = []
     in_channels = image_channels
     
-    for v in cfg:
-        if v == MAXPOOL:
+    for n in cfg:
+        if n == MAXPOOL:
             layers.append(
                 nn.MaxPool2d(
                     kernel_size=2,
@@ -63,17 +64,17 @@ def make_layers(cfg, image_channels=3, batchnorm=False):
                 )
             )
         else:
-            v = cast(int, v)
+            n = cast(int, n)
             conv2d = nn.Conv2d(
                 in_channels=in_channels, 
-                out_channels=v, 
+                out_channels=n, 
                 kernel_size=3, 
                 padding=1
             )
             if batchnorm:
                 layers.extend([
                     conv2d, 
-                    nn.BatchNorm2d(v), 
+                    nn.BatchNorm2d(num_features=n), 
                     nn.ReLU(inplace=True)
                 ])
             else:
@@ -81,7 +82,7 @@ def make_layers(cfg, image_channels=3, batchnorm=False):
                     conv2d, 
                     nn.ReLU(inplace=True)
                 ])
-            in_channels = v
+            in_channels = n
     return nn.Sequential(*layers)
 
 def VGG16(in_features=3, num_classes=1000, batchnorm=False, dropout=0.5):
