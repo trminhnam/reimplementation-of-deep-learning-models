@@ -1,0 +1,12 @@
+
+https://lena-voita.github.io/nlp_course/seq2seq_and_attention.html
+https://jalammar.github.io/illustrated-transformer/
+
+
+http://peterbloem.nl/blog/transformers
+https://arxiv.org/abs/1706.03762
+https://www.youtube.com/watch?v=M6adRGJe5cQ
+https://github.com/aladdinpersson/Machine-Learning-Collection/blob/master/ML/Pytorch/more_advanced/seq2seq_transformer/seq2seq_transformer.py
+https://pytorch.org/tutorials/beginner/transformer_tutorial.html#define-the-model
+https://towardsdatascience.com/how-to-code-the-transformer-in-pytorch-24db27c8f9ec
+https://github.com/hyunwoongko/transformer/blob/master/data.py
