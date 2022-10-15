@@ -101,7 +101,7 @@ class MobileNetV1(nn.Module):
         ]
         print("first conv:", n_filters)
         print("=====================================")
-        
+
 
         for i in range(3):
             for j in range(2):
