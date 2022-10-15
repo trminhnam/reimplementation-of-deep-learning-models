@@ -99,9 +99,6 @@ class MobileNetV1(nn.Module):
             nn.BatchNorm2d(num_features=n_filters),
             nn.ReLU(inplace=True),
         ]
-        print("first conv:", n_filters)
-        print("=====================================")
-
 
         for i in range(3):
             for j in range(2):
@@ -126,8 +123,6 @@ class MobileNetV1(nn.Module):
                             padding=p
                         )
                     )
-                print(n_filters)
-        print("=====================================")
         
         for i in range(5):
             layers.append(
@@ -138,8 +133,6 @@ class MobileNetV1(nn.Module):
                     padding=1
                 )
             )
-            print(n_filters)
-        print("=====================================")
         
         layers.append(
             DepthwiseSeparableConv(
@@ -150,7 +143,6 @@ class MobileNetV1(nn.Module):
             )
         )
         n_filters *= 2
-        print(n_filters)
         
         layers.append(
             DepthwiseSeparableConv(
@@ -160,8 +152,6 @@ class MobileNetV1(nn.Module):
                 padding=1,
             )
         )
-        print(n_filters)
-        print("=====================================")
         
         return nn.Sequential(*layers)
                 
