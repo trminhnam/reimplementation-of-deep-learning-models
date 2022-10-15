@@ -75,7 +75,7 @@ class MobileNetV1(nn.Module):
         
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         
-        self.fc = nn.Linear(in_features=1024, out_features=num_classes)
+        self.fc = nn.Linear(in_features=int(1024 * width_multiplier), out_features=num_classes)
         self.softmax = nn.Softmax(dim=1)
         
     def forward(self, x):
@@ -161,7 +161,7 @@ class MobileNetV1(nn.Module):
 
 if __name__ == "__main__":
     x = torch.randn(5, 3, 224, 224)
-    model = MobileNetV1()
+    model = MobileNetV1(width_multiplier=0.25)
     print(model)
     print(f'Input shape: {x.shape}')
     print(f'Output shape: {model(x).shape}')
