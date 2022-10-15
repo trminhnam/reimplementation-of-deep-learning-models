@@ -66,9 +66,12 @@ class DepthwiseSeparableConv(nn.Module):
         return x
         
 class MobileNetV1(nn.Module):
-    def __init__(self, num_classes=1000):
+    def __init__(self, n_filters=32, width_multiplier=1.0, num_classes=1000):
         super(MobileNetV1, self).__init__()
-        self.conv_layers = self._create_conv_layers()
+        self.n_filters = n_filters
+        self.width_multiplier = width_multiplier
+        
+        self.conv_layers = self._create_conv_layers(self.n_filters, self.width_multiplier)
         
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         
@@ -85,9 +88,9 @@ class MobileNetV1(nn.Module):
         x = self.softmax(x)
         return x
         
-    def _create_conv_layers(self):
+    def _create_conv_layers(self, n_filters, width_multiplier):
         # construct layers
-        n_filters = 32
+        n_filters = int(n_filters * width_multiplier)
         layers = [
             nn.Conv2d(
                 in_channels=3,
