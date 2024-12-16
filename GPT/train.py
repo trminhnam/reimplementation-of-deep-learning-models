@@ -7,18 +7,18 @@ import torch.optim as optim
 from tqdm import tqdm
 
 from bigram import BigramLM
+from transformer import GPTLanguageModel
 from utils import get_batch, estimate_loss
 
 
 # Hyperparameters
-batch_size = 4
-batch_size = 128
-block_size = 128
-max_steps = 2000
+batch_size = 32
+block_size = 512
+max_steps = 5000
 train_test_ratio = 0.9
-eval_interval = 200
-eval_steps = 100
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+eval_interval = 500
+eval_steps = 200
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 # Load data
 with open("input.txt", "r") as file:
@@ -52,7 +52,10 @@ print(f"x: {x}")
 print(f"y: {y}")
 
 # Create model
-model = BigramLM(vocab_size)
+# model = BigramLM(vocab_size)
+model = GPTLanguageModel(
+    vocab_size, max_len=512, d_model=512, n_layers=8, n_heads=8, d_ff=2048, dropout=0.1
+)
 
 # Create optimizer
 optimizer = optim.AdamW(model.parameters(), lr=1e-3)
@@ -74,9 +77,7 @@ for i in pbar:
     pbar.set_description(f"Loss: {loss.item():.4f}")
 
     if i % eval_interval == 0:
-        loss = estimate_loss(
-            model, test_data, batch_size, block_size, eval_steps, device
-        )
+        loss = estimate_loss(model, test_data, batch_size, block_size, eval_steps, device)
         print(f"Step {i}, Test loss: {loss:.4f}")
 
 
@@ -85,3 +86,9 @@ generated_content = model.generate(
     torch.tensor([[1], [2]], device=device), max_new_tokens=100
 ).tolist()
 print(f"Generated text: {decode(generated_content[0])}")
+
+
+# Save the model
+os.makedirs("models", exist_ok=True)
+torch.save(model.state_dict(), "models/gpt_model.pth")
+print("Model saved")
